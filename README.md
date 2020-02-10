@@ -33,6 +33,12 @@ Resulting in the following query:
 
 ---
 
+## Installation
+
+Coming soon...
+
+## Usage
+
 ### Expressions
 
 Expressions are simple field binary comparisons.
@@ -146,3 +152,9 @@ Expression(.displayName, .regexFullMatch("Temp \\d{4}"))
 ```
 
 `starts_with` and `ends_with` support coming soon...
+
+
+## Todo
+- [ ] Support full range of function expressions
+- [ ] Support unified date expressions/formatting
+- [ ] Unit tests
