@@ -86,3 +86,13 @@ public func NotExpression<Field: RawRepresentable>(_ field: Field, _ operator: S
 public func NotExpression<Field: RawRepresentable>(_ field: Field, _ specialToken: SpecialToken) -> FilterToken<Field> where Field.RawValue == String {
     return .specialExpression(field, specialToken, inversed: true)
 }
+
+// MARK: Date Expressions
+
+public func Expression<Field: RawRepresentable>(_ field: Field, operator: StringOperator = .equal, date: Date, formatter: (Date, TimeZone) -> String) -> FilterToken<Field> where Field.RawValue == String {
+    // TODO
+}
+
+public func Expression<Field: RawRepresentable>(_ field: Field, operator: StringOperator = .equal, date: Date) -> FilterToken<Field> where Field.RawValue == String {
+    // TODO
+}
