@@ -1,5 +1,6 @@
 import XCTest
-@testable import GCPFilter
+
+@testable import GCPFilterBuilder
 
 final class GCPFilterTests: XCTestCase {
     enum TestField: String {
