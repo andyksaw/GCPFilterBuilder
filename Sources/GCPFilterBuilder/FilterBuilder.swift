@@ -37,24 +37,16 @@ public func Group<Field: RawRepresentable>(@FilterBuilder<Field> builder: () -> 
 
 // MARK: - Expressions
 
-public func Expression<Field: RawRepresentable, Value: RawRepresentable>(_ field: Field, _ operator: NumericOperator = .equal, case: Value) -> FilterToken<Field> where Field.RawValue == String, Value.RawValue == Int {
-    return .expression(field: field, operator: `operator`, value: "\(`case`.rawValue)", inversed: false)
+public func Expression<Field: RawRepresentable, Value: RawRepresentable>(_ field: Field, _ operator: Operator = .equal, case: Value) -> FilterToken<Field> where Field.RawValue == String, Value.RawValue == Int {
+    return .expression(field: field, operator: `operator`, value: ValueBox(integerLiteral: `case`.rawValue), inversed: false)
 }
 
-public func Expression<Field: RawRepresentable, Value: RawRepresentable>(_ field: Field, _ operator: StringOperator = .equal, case: Value) -> FilterToken<Field> where Field.RawValue == String, Value.RawValue == String {
-    return .expression(field: field, operator: `operator`, value: "'\(`case`.rawValue)'", inversed: false)
+public func Expression<Field: RawRepresentable, Value: RawRepresentable>(_ field: Field, _ operator: Operator = .equal, case: Value) -> FilterToken<Field> where Field.RawValue == String, Value.RawValue == String {
+    return .expression(field: field, operator: `operator`, value: ValueBox(stringLiteral: `case`.rawValue), inversed: false)
 }
 
-public func Expression<Field: RawRepresentable>(_ field: Field, _ operator: StringOperator = .equal, rawValue: Int) -> FilterToken<Field> where Field.RawValue == String {
-    return .expression(field: field, operator: `operator`, value: "\(rawValue)", inversed: false)
-}
-
-public func Expression<Field: RawRepresentable>(_ field: Field, _ operator: StringOperator = .equal, rawValue: String) -> FilterToken<Field> where Field.RawValue == String {
-    return .expression(field: field, operator: `operator`, value: "'\(rawValue)'", inversed: false)
-}
-
-public func Expression<Field: RawRepresentable>(_ field: Field, _ operator: StringOperator = .equal, boolean: Bool) -> FilterToken<Field> where Field.RawValue == String {
-    return .expression(field: field, operator: `operator`, value: "\(boolean)", inversed: false)
+public func Expression<Field: RawRepresentable>(_ field: Field, _ operator: Operator = .equal, rawValue: ValueBox) -> FilterToken<Field> where Field.RawValue == String {
+    return .expression(field: field, operator: `operator`, value: rawValue, inversed: false)
 }
 
 public func Expression<Field: RawRepresentable>(_ field: Field, _ specialToken: SpecialToken) -> FilterToken<Field> where Field.RawValue == String {
@@ -63,24 +55,16 @@ public func Expression<Field: RawRepresentable>(_ field: Field, _ specialToken: 
 
 // MARK: - Inverted Expressions
 
-public func NotExpression<Field: RawRepresentable, Value: RawRepresentable>(_ field: Field, _ operator: NumericOperator = .equal, case: Value) -> FilterToken<Field> where Field.RawValue == String, Value.RawValue == Int {
-    return .expression(field: field, operator: `operator`, value: "\(`case`.rawValue)", inversed: true)
+public func NotExpression<Field: RawRepresentable, Value: RawRepresentable>(_ field: Field, _ operator: Operator = .equal, case: Value) -> FilterToken<Field> where Field.RawValue == String, Value.RawValue == Int {
+    return .expression(field: field, operator: `operator`, value: ValueBox(integerLiteral: `case`.rawValue), inversed: true)
 }
 
-public func NotExpression<Field: RawRepresentable, Value: RawRepresentable>(_ field: Field, _ operator: StringOperator = .equal, case: Value) -> FilterToken<Field> where Field.RawValue == String, Value.RawValue == String {
-    return .expression(field: field, operator: `operator`, value: "'\(`case`.rawValue)'", inversed: true)
+public func NotExpression<Field: RawRepresentable, Value: RawRepresentable>(_ field: Field, _ operator: Operator = .equal, case: Value) -> FilterToken<Field> where Field.RawValue == String, Value.RawValue == String {
+    return .expression(field: field, operator: `operator`, value: ValueBox(stringLiteral: `case`.rawValue), inversed: true)
 }
 
-public func NotExpression<Field: RawRepresentable>(_ field: Field, _ operator: StringOperator = .equal, rawValue: Int) -> FilterToken<Field> where Field.RawValue == String {
-    return .expression(field: field, operator: `operator`, value: "\(rawValue)", inversed: true)
-}
-
-public func NotExpression<Field: RawRepresentable>(_ field: Field, _ operator: StringOperator = .equal, rawValue: String) -> FilterToken<Field> where Field.RawValue == String {
-    return .expression(field: field, operator: `operator`, value: "'\(rawValue)'", inversed: true)
-}
-
-public func NotExpression<Field: RawRepresentable>(_ field: Field, _ operator: StringOperator = .equal, boolean: Bool) -> FilterToken<Field> where Field.RawValue == String {
-    return .expression(field: field, operator: `operator`, value: "\(boolean)", inversed: true)
+public func NotExpression<Field: RawRepresentable>(_ field: Field, _ operator: Operator = .equal, rawValue: ValueBox) -> FilterToken<Field> where Field.RawValue == String {
+    return .expression(field: field, operator: `operator`, value: rawValue, inversed: true)
 }
 
 public func NotExpression<Field: RawRepresentable>(_ field: Field, _ specialToken: SpecialToken) -> FilterToken<Field> where Field.RawValue == String {
@@ -89,10 +73,10 @@ public func NotExpression<Field: RawRepresentable>(_ field: Field, _ specialToke
 
 // MARK: Date Expressions
 
-public func Expression<Field: RawRepresentable>(_ field: Field, operator: StringOperator = .equal, date: Date, formatter: (Date, TimeZone) -> String) -> FilterToken<Field> where Field.RawValue == String {
-    // TODO
-}
+//public func Expression<Field: RawRepresentable>(_ field: Field, operator: StringOperator = .equal, date: Date, formatter: (Date, TimeZone) -> String) -> FilterToken<Field> where Field.RawValue == String {
+//     TODO
+//}
 
-public func Expression<Field: RawRepresentable>(_ field: Field, operator: StringOperator = .equal, date: Date) -> FilterToken<Field> where Field.RawValue == String {
-    // TODO
-}
+//public func Expression<Field: RawRepresentable>(_ field: Field, operator: StringOperator = .equal, date: Date) -> FilterToken<Field> where Field.RawValue == String {
+//     TODO
+//}

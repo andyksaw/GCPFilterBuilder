@@ -13,7 +13,7 @@ public indirect enum FilterToken<Field: RawRepresentable>: CustomStringConvertib
     case and([FilterToken<Field>], grouped: Bool)
     case or([FilterToken<Field>], grouped: Bool)
     case group([FilterToken<Field>])
-    case expression(field: Field, operator: Operator, value: String, inversed: Bool)
+    case expression(field: Field, operator: Operator, value: ValueBox, inversed: Bool)
     case specialExpression(Field, SpecialToken, inversed: Bool)
 
     public var description: String {
@@ -42,7 +42,7 @@ public indirect enum FilterToken<Field: RawRepresentable>: CustomStringConvertib
             return "(" + tokens.description + ")"
 
         case .expression(let field, let `operator`, let value, let inversed):
-            let string = [field.rawValue, `operator`.description, value].joined()
+            let string = [field.rawValue, `operator`.description, value.description].joined()
             return inversed ? "NOT " + string : string
 
         case .specialExpression(let field, let specialToken, let inversed):
