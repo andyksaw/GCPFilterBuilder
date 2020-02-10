@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct ValueBox: CustomStringConvertible, ExpressibleByStringLiteral, ExpressibleByIntegerLiteral, ExpressibleByBooleanLiteral {
+public struct ValueBox: CustomStringConvertible, ExpressibleByStringLiteral, ExpressibleByIntegerLiteral, ExpressibleByBooleanLiteral, ExpressibleByFloatLiteral {
     private let _box: WrappedValueBox
 
     public var description: String {
@@ -16,15 +16,19 @@ public struct ValueBox: CustomStringConvertible, ExpressibleByStringLiteral, Exp
     }
 
     public init(stringLiteral value: String) {
-        self._box = StringValueBox(_value: value)
+        self._box = StringValueBox(value)
     }
 
     public init(integerLiteral value: Int) {
-        self._box = IntValueBox(_value: value)
+        self._box = IntValueBox(value)
     }
 
     public init(booleanLiteral value: Bool) {
-        self._box = BoolValueBox(_value: value)
+        self._box = BoolValueBox(value)
+    }
+
+    public init(floatLiteral value: Float) {
+        self._box = FloatValueBox(value)
     }
 }
 
@@ -38,6 +42,10 @@ struct StringValueBox: WrappedValueBox {
     var toString: String {
         return "'\(_value)'"
     }
+
+    init(_ value: String) {
+        self._value = value
+    }
 }
 
 struct IntValueBox: WrappedValueBox {
@@ -46,6 +54,10 @@ struct IntValueBox: WrappedValueBox {
     var toString: String {
         return "\(_value)"
     }
+
+    init(_ value: Int) {
+        self._value = value
+    }
 }
 
 struct BoolValueBox: WrappedValueBox {
@@ -53,5 +65,21 @@ struct BoolValueBox: WrappedValueBox {
 
     var toString: String {
         return "\(_value)"
+    }
+
+    init(_ value: Bool) {
+        self._value = value
+    }
+}
+
+struct FloatValueBox: WrappedValueBox {
+    var _value: Float
+
+    var toString: String {
+        return "\(_value)"
+    }
+
+    init(_ value: Float) {
+        self._value = value
     }
 }
