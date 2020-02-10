@@ -14,11 +14,13 @@ struct FilterBuilder<Field: RawRepresentable> where Field.RawValue == String {
     }
 }
 
-// MARK: - Building Blocks
+// MARK: - Root Block
 
 public func BuildQuery<Field: RawRepresentable>(for fields: Field.Type, @FilterBuilder<Field> builder: () -> FilterToken<Field>) -> String where Field.RawValue == String {
     return FilterToken.root(builder()).description
 }
+
+// MARK: - Building Blocks
 
 public func And<Field: RawRepresentable>(grouped: Bool = true, @FilterBuilder<Field> builder: () -> [FilterToken<Field>]) -> FilterToken<Field> where Field.RawValue == String {
     return .and(builder(), grouped: grouped)
