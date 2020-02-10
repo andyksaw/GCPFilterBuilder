@@ -2,7 +2,7 @@
 
 (WIP)
 
-A light-weight library to build filter/sort query strings for use with APIs that follow [GCP's API guidelines](https://cloud.google.com/monitoring/api/v3/sorting-and-filtering). 
+A lightweight DSL library to build query strings for use with APIs that follow [GCP's API guidelines](https://cloud.google.com/monitoring/api/v3/sorting-and-filtering). 
 
 The library leverages the power of Swift 5 Function Builders to allow you to write your strings in a type-safe but declarative, expressive manner.
 
@@ -30,3 +30,119 @@ Resulting in the following query:
 ```
 (display_name.regex.full_match('[a-zA-Z]{4}') OR display_name='dummy_user') AND is_active=true
 ```
+
+---
+
+### Expressions
+
+Expressions are simple field binary comparisons.
+
+You can pass a rawValue for comparison:
+```swift
+Expression(.fieldName, .equal, "string")
+Expression(.fieldName, .equal, 123)
+Expression(.fieldName, .equal, true)
+```
+
+You can pass a `RawRepresentable` (String|Int) enum case:
+```swift
+enum City: String {
+    case tokyo
+    case osaka
+    case fukuoka
+}
+
+Expression(.countryName, .equal, City.tokyo)
+```
+
+Omitting the operator will default to `.equal`
+```swift
+// Same as above
+Expression(.countryName, City.tokyo)
+```
+
+### Operators
+
+All the expected operators are supported, including 'not equal' `!=` and 'containment' `:`
+
+```swift
+Expression(.description, .contain, "swearing")
+Expression(.viewCount, .greaterThanOrEqual, 10)
+```
+
+Operators can be substituted with a String for greater readability at the cost of compiler type safety:
+```swift
+Expression(.position, "=", "center")
+Expression(.energyLevel, "<", 50)
+```
+
+### Groups
+
+You can manually specify a group of parenthesis:
+```swift
+Group {
+    Expression(.name, "John Smith")
+}
+// (name='John Smith')
+```
+
+Or you can force an `And` or `Or` to provide their own:
+```swift
+And(grouped: true) {
+    ...
+}
+
+Or(grouped: true) {
+    ...
+}
+```
+
+By default, `grouped` is `true`. However, the root of a query will always have parenthesis stripped.
+
+### Nested Blocks
+`And` and `Or` can be nested infinitely.
+
+```swift
+And {
+    Or {
+        Or {
+            ...
+            ...
+        }
+        ...
+    }
+    ...
+}
+```
+
+### Not
+
+You can invert expressions:
+```swift
+NotExpression(.weather, Weather.Sunny)
+
+// NOT weather='sunny'
+
+// Same thing as weather!='sunny'
+```
+
+Multiple NOT can be combined:
+```swift
+Or {
+    NotExpression(.adjective, "bad")
+    NotExpression(.adjective, "awful")
+}
+
+// (NOT adjective='bad' OR NOT adjective='awful')
+```
+
+### Function Expressions
+
+Supports regex:
+```swift
+Expression(.displayName, .regexFullMatch("Temp \\d{4}"))
+
+// display_name=regex.full_match('Temp \\d{4}')
+```
+
+`starts_with` and `ends_with` support coming soon...
