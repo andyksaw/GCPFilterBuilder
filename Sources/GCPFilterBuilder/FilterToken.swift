@@ -13,8 +13,8 @@ public indirect enum FilterToken<Field: RawRepresentable>: CustomStringConvertib
     case and([FilterToken<Field>], grouped: Bool)
     case or([FilterToken<Field>], grouped: Bool)
     case group([FilterToken<Field>])
-    case expression(field: Field, operator: Operator, value: String)
-    case specialExpression(Field, SpecialToken)
+    case expression(field: Field, operator: Operator, value: String, inversed: Bool)
+    case specialExpression(Field, SpecialToken, inversed: Bool)
 
     public var description: String {
         switch self {
@@ -41,20 +41,23 @@ public indirect enum FilterToken<Field: RawRepresentable>: CustomStringConvertib
         case .group(let tokens):
             return "(" + tokens.description + ")"
 
-        case .expression(let field, let `operator`, let value):
-            return [field.rawValue, `operator`.description, value].joined()
+        case .expression(let field, let `operator`, let value, let inversed):
+            let string = [field.rawValue, `operator`.description, value].joined()
+            return inversed ? "NOT " + string : string
 
-        case .specialExpression(let field, let specialToken):
-            switch specialToken {
-            case .empty:
-                return "\(field.rawValue).empty"
-            case .size:
-                return "\(field.rawValue).size"
-            case .fullMatchRegex(let pattern):
-                let escapedPattern = pattern.replacingOccurrences(of: "\\", with: "\\\\", options: .literal)
-                return "\(field.rawValue).regex.full_match('\(escapedPattern)')"
-            }
-
+        case .specialExpression(let field, let specialToken, let inversed):
+            let string: String = {
+                switch specialToken {
+                case .empty:
+                    return "\(field.rawValue).empty"
+                case .size:
+                    return "\(field.rawValue).size"
+                case .fullMatchRegex(let pattern):
+                    let escapedPattern = pattern.replacingOccurrences(of: "\\", with: "\\\\", options: .literal)
+                    return "\(field.rawValue).regex.full_match('\(escapedPattern)')"
+                }
+            }()
+            return inversed ? "NOT " + string : string
         }
     }
 }
