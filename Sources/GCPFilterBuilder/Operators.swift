@@ -11,6 +11,7 @@ import Foundation
 public protocol Operator: CustomStringConvertible {}
 
 public enum StringOperator: Operator {
+    case contains
     case equal
     case notEqual
     case greaterThan
@@ -20,6 +21,7 @@ public enum StringOperator: Operator {
 
     public var description: String {
         switch self {
+        case .contains: return ":"
         case .equal: return "="
         case .notEqual: return "!="
         case .greaterThan: return ">"
@@ -31,7 +33,7 @@ public enum StringOperator: Operator {
 }
 
 public enum NumericOperator: Operator {
-    case containment // Equivalent to '=' for numeric types
+    case contains // Equivalent to '=' for numeric types
     case equal // Should be avoided for double-valued fields
     case notEqual
     case greaterThan
@@ -41,7 +43,7 @@ public enum NumericOperator: Operator {
 
     public var description: String {
        switch self {
-       case .containment: return ":"
+       case .contains: return ":"
        case .equal: return "="
        case .notEqual: return "!="
        case .greaterThan: return ">"

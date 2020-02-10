@@ -1,7 +1,7 @@
 import XCTest
 
-import GCPFilterTests
+import GCPFilterBuilderTests
 
 var tests = [XCTestCaseEntry]()
-tests += GCPFilterTests.allTests()
+tests += GCPFilterBuilderTests.allTests()
 XCTMain(tests)
