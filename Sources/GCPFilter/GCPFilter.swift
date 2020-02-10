@@ -7,7 +7,7 @@ struct FilterBuilder<Field: RawRepresentable> where Field.RawValue == String {
     }
 }
 
-indirect enum FilterToken<Field: RawRepresentable>: CustomStringConvertible where Field.RawValue == String {
+public indirect enum FilterToken<Field: RawRepresentable>: CustomStringConvertible where Field.RawValue == String {
     case root(FilterToken<Field>)
     case and([FilterToken<Field>], grouped: Bool)
     case or([FilterToken<Field>], grouped: Bool)
@@ -15,7 +15,7 @@ indirect enum FilterToken<Field: RawRepresentable>: CustomStringConvertible wher
     case expression(field: Field, operation: Operation, value: String)
     case specialExpression(Field, SpecialToken)
 
-    var description: String {
+    public var description: String {
         switch self {
         case .root(.root):
             preconditionFailure("FilterQuery cannot contain a nested FilterQuery")
@@ -57,15 +57,15 @@ indirect enum FilterToken<Field: RawRepresentable>: CustomStringConvertible wher
     }
 }
 
-enum SpecialToken {
+public enum SpecialToken {
     case empty
     case size
     case fullMatchRegex(String)
 }
 
-protocol Operation: CustomStringConvertible {}
+public protocol Operation: CustomStringConvertible {}
 
-enum StringOperation: Operation {
+public enum StringOperation: Operation {
     case equal
     case notEqual
     case greaterThan
@@ -73,7 +73,7 @@ enum StringOperation: Operation {
     case lessThan
     case lessThanOrEqual
 
-    var description: String {
+    public var description: String {
         switch self {
         case .equal: return "="
         case .notEqual: return "!="
@@ -85,7 +85,7 @@ enum StringOperation: Operation {
     }
 }
 
-enum NumericOperation: Operation {
+public enum NumericOperation: Operation {
     case containment // Equivalent to '=' for numeric types
     case equal // Should be avoided for double-valued fields
     case notEqual
@@ -94,7 +94,7 @@ enum NumericOperation: Operation {
     case lessThan
     case lessThanOrEqual
 
-    var description: String {
+    public var description: String {
        switch self {
        case .containment: return ":"
        case .equal: return "="
@@ -107,42 +107,42 @@ enum NumericOperation: Operation {
    }
 }
 
-func MakeQuery<Field: RawRepresentable>(for fields: Field.Type, @FilterBuilder<Field> builder: () -> FilterToken<Field>) -> FilterToken<Field> where Field.RawValue == String {
-    return .root(builder())
+public func BuildQuery<Field: RawRepresentable>(for fields: Field.Type, @FilterBuilder<Field> builder: () -> FilterToken<Field>) -> String where Field.RawValue == String {
+    return FilterToken.root(builder()).description
 }
 
-func And<Field: RawRepresentable>(grouped: Bool = true, @FilterBuilder<Field> builder: () -> [FilterToken<Field>]) -> FilterToken<Field> where Field.RawValue == String {
+public func And<Field: RawRepresentable>(grouped: Bool = true, @FilterBuilder<Field> builder: () -> [FilterToken<Field>]) -> FilterToken<Field> where Field.RawValue == String {
     return .and(builder(), grouped: grouped)
 }
 
-func Or<Field: RawRepresentable>(grouped: Bool = true, @FilterBuilder<Field> builder: () -> [FilterToken<Field>]) -> FilterToken<Field> where Field.RawValue == String {
+public func Or<Field: RawRepresentable>(grouped: Bool = true, @FilterBuilder<Field> builder: () -> [FilterToken<Field>]) -> FilterToken<Field> where Field.RawValue == String {
     return .or(builder(), grouped: grouped)
 }
 
-func Group<Field: RawRepresentable>(@FilterBuilder<Field> builder: () -> [FilterToken<Field>]) -> FilterToken<Field> where Field.RawValue == String {
+public func Group<Field: RawRepresentable>(@FilterBuilder<Field> builder: () -> [FilterToken<Field>]) -> FilterToken<Field> where Field.RawValue == String {
     return .group(builder())
 }
 
-func Expression<Field: RawRepresentable, Value: RawRepresentable>(_ field: Field, _ operation: NumericOperation = .equal, case: Value) -> FilterToken<Field> where Field.RawValue == String, Value.RawValue == Int {
+public func Expression<Field: RawRepresentable, Value: RawRepresentable>(_ field: Field, _ operation: NumericOperation = .equal, case: Value) -> FilterToken<Field> where Field.RawValue == String, Value.RawValue == Int {
     return .expression(field: field, operation: operation, value: "\(`case`.rawValue)")
 }
 
-func Expression<Field: RawRepresentable, Value: RawRepresentable>(_ field: Field, _ operation: StringOperation = .equal, case: Value) -> FilterToken<Field> where Field.RawValue == String, Value.RawValue == String {
+public func Expression<Field: RawRepresentable, Value: RawRepresentable>(_ field: Field, _ operation: StringOperation = .equal, case: Value) -> FilterToken<Field> where Field.RawValue == String, Value.RawValue == String {
     return .expression(field: field, operation: operation, value: "'\(`case`.rawValue)'")
 }
 
-func Expression<Field: RawRepresentable>(_ field: Field, _ operation: StringOperation = .equal, rawValue: Int) -> FilterToken<Field> where Field.RawValue == String {
+public func Expression<Field: RawRepresentable>(_ field: Field, _ operation: StringOperation = .equal, rawValue: Int) -> FilterToken<Field> where Field.RawValue == String {
     return .expression(field: field, operation: operation, value: "\(rawValue)")
 }
 
-func Expression<Field: RawRepresentable>(_ field: Field, _ operation: StringOperation = .equal, rawValue: String) -> FilterToken<Field> where Field.RawValue == String {
+public func Expression<Field: RawRepresentable>(_ field: Field, _ operation: StringOperation = .equal, rawValue: String) -> FilterToken<Field> where Field.RawValue == String {
     return .expression(field: field, operation: operation, value: "'\(rawValue)'")
 }
 
-func Expression<Field: RawRepresentable>(_ field: Field, _ operation: StringOperation = .equal, boolean: Bool) -> FilterToken<Field> where Field.RawValue == String {
+public func Expression<Field: RawRepresentable>(_ field: Field, _ operation: StringOperation = .equal, boolean: Bool) -> FilterToken<Field> where Field.RawValue == String {
     return .expression(field: field, operation: operation, value: "\(boolean)")
 }
 
-func Expression<Field: RawRepresentable>(_ field: Field, _ specialToken: SpecialToken) -> FilterToken<Field> where Field.RawValue == String {
+public func Expression<Field: RawRepresentable>(_ field: Field, _ specialToken: SpecialToken) -> FilterToken<Field> where Field.RawValue == String {
     return .specialExpression(field, specialToken)
 }
