@@ -14,7 +14,7 @@ public indirect enum FilterToken<Field: RawRepresentable>: CustomStringConvertib
     case or([FilterToken<Field>], grouped: Bool)
     case group([FilterToken<Field>])
     case expression(field: Field, operator: Operator, value: ValueBox, inversed: Bool)
-    case specialExpression(Field, SpecialToken, inversed: Bool)
+    case functionExpression(Field, FunctionExp, inversed: Bool)
 
     public var description: String {
         switch self {
@@ -45,7 +45,7 @@ public indirect enum FilterToken<Field: RawRepresentable>: CustomStringConvertib
             let string = [field.rawValue, `operator`.rawValue, value.description].joined()
             return inversed ? "NOT " + string : string
 
-        case .specialExpression(let field, let specialToken, let inversed):
+        case .functionExpression(let field, let specialToken, let inversed):
             let string: String = {
                 switch specialToken {
                 case .empty:
@@ -62,7 +62,7 @@ public indirect enum FilterToken<Field: RawRepresentable>: CustomStringConvertib
     }
 }
 
-public enum SpecialToken {
+public enum FunctionExp {
     case empty
     case size
     case fullMatchRegex(String)

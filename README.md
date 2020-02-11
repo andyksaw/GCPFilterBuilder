@@ -39,6 +39,10 @@ Coming soon...
 
 ## Usage
 
+### Field Definition
+
+`BuildQuery` requires an enum type to be passed to it. The enum represents every field name that can be used in a query.
+
 ### Expressions
 
 Expressions are simple field binary comparisons.
@@ -106,12 +110,14 @@ Or(grouped: true) {
 By default, `grouped` is `true`. However, the root of a query will always have parenthesis stripped.
 
 ### Nested Blocks
-`And` and `Or` can be nested infinitely.
+`And` and `Or` can be nested infinitely and can hold an infinite number of expressions
 
 ```swift
 And {
     Or {
         Or {
+            ...
+            ...
             ...
             ...
         }
