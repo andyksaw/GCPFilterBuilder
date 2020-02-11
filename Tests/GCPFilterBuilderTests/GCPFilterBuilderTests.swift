@@ -28,8 +28,8 @@ final class GCPFilterTests: XCTestCase {
     func testAnd() {
         let query = BuildQuery(for: TestField.self) {
             And {
-                Expression(.displayName, .equal, rawValue: "test_name")
-                Expression(.description, .equal, rawValue: "test_description")
+                Field(.displayName, .equal, rawValue: "test_name")
+                Field(.description, .equal, rawValue: "test_description")
             }
         }
         XCTAssertEqual(query, "display_name='test_name' AND description='test_description'")
@@ -39,10 +39,10 @@ final class GCPFilterTests: XCTestCase {
         let query = BuildQuery(for: TestField.self) {
             And {
                 And {
-                    Expression(.displayName, .equal, rawValue: "test_name")
-                    Expression(.description, .equal, rawValue: "test_description")
+                    Field(.displayName, .equal, rawValue: "test_name")
+                    Field(.description, .equal, rawValue: "test_description")
                 }
-                Expression(.userLabels, .equal, rawValue: "test_user_labels")
+                Field(.userLabels, .equal, rawValue: "test_user_labels")
             }
         }
         XCTAssertEqual(query, "(display_name='test_name' AND description='test_description') AND user_labels='test_user_labels'")
@@ -51,8 +51,8 @@ final class GCPFilterTests: XCTestCase {
     func testOr() {
         let query = BuildQuery(for: TestField.self) {
             Or {
-                Expression(.displayName, .equal, rawValue: "test_name")
-                Expression(.description, .equal, rawValue: "test_description")
+                Field(.displayName, .equal, rawValue: "test_name")
+                Field(.description, .equal, rawValue: "test_description")
             }
         }
         XCTAssertEqual(query, "display_name='test_name' OR description='test_description'")
@@ -62,10 +62,10 @@ final class GCPFilterTests: XCTestCase {
         let query = BuildQuery(for: TestField.self) {
             Or {
                 Or {
-                    Expression(.displayName, .equal, rawValue: "test_name")
-                    Expression(.description, .equal, rawValue: "test_description")
+                    Field(.displayName, .equal, rawValue: "test_name")
+                    Field(.description, .equal, rawValue: "test_description")
                 }
-                Expression(.userLabels, .equal, rawValue: "test_user_labels")
+                Field(.userLabels, .equal, rawValue: "test_user_labels")
             }
         }
         XCTAssertEqual(query, "(display_name='test_name' OR description='test_description') OR user_labels='test_user_labels'")

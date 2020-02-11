@@ -16,10 +16,10 @@ enum UserField: String {
 let query = BuildQuery(for: UserField.self) {
     And {
         Or {
-            Expression(.displayName, .regexFullMatch("[a-zA-Z]{4}"))
-            Expression(.displayName, "=", "dummy_user")
+            Field(.displayName, .regexFullMatch("[a-zA-Z]{4}"))
+            Field(.displayName, "=", "dummy_user")
         }
-        Expression(.isActive, true)
+        Field(.isActive, true)
     }
 }
 
@@ -49,9 +49,9 @@ Expressions are simple field binary comparisons.
 
 You can pass a rawValue for comparison:
 ```swift
-Expression(.fieldName, .equal, "string")
-Expression(.fieldName, .equal, 123)
-Expression(.fieldName, .equal, true)
+Field(.fieldName, .equal, "string")
+Field(.fieldName, .equal, 123)
+Field(.fieldName, .equal, true)
 ```
 
 You can pass a `RawRepresentable` (String|Int) enum case:
@@ -62,13 +62,13 @@ enum City: String {
     case fukuoka
 }
 
-Expression(.countryName, .equal, City.tokyo)
+Field(.countryName, .equal, City.tokyo)
 ```
 
 Omitting the operator will default to `.equal`
 ```swift
 // Same as above
-Expression(.countryName, City.tokyo)
+Field(.countryName, City.tokyo)
 ```
 
 ### Operators
@@ -76,14 +76,14 @@ Expression(.countryName, City.tokyo)
 All the expected operators are supported, including 'not equal' `!=` and 'containment' `:`
 
 ```swift
-Expression(.description, .contain, "swearing")
-Expression(.viewCount, .greaterThanOrEqual, 10)
+Field(.description, .contains, "swearing")
+Field(.viewCount, .greaterThanOrEqual, 10)
 ```
 
 Operators can be substituted with a String for greater readability at the cost of compiler type safety:
 ```swift
-Expression(.position, "=", "center")
-Expression(.energyLevel, "<", 50)
+Field(.position, "=", "center")
+Field(.energyLevel, "<", 50)
 ```
 
 ### Groups
@@ -91,7 +91,7 @@ Expression(.energyLevel, "<", 50)
 You can manually specify a group of parenthesis:
 ```swift
 Group {
-    Expression(.name, "John Smith")
+    Field(.name, "John Smith")
 }
 // (name='John Smith')
 ```
@@ -131,7 +131,7 @@ And {
 
 You can invert expressions:
 ```swift
-NotExpression(.weather, Weather.Sunny)
+Not(.weather, Weather.Sunny)
 
 // NOT weather='sunny'
 
@@ -141,8 +141,8 @@ NotExpression(.weather, Weather.Sunny)
 Multiple NOT can be combined:
 ```swift
 Or {
-    NotExpression(.adjective, "bad")
-    NotExpression(.adjective, "awful")
+    Not(.adjective, "bad")
+    Not(.adjective, "awful")
 }
 
 // (NOT adjective='bad' OR NOT adjective='awful')
@@ -152,14 +152,14 @@ Or {
 
 Supports regex:
 ```swift
-Expression(.displayName, .regexFullMatch("Temp \\d{4}"))
+Field(.displayName, .regexFullMatch("Temp \\d{4}"))
 
 // display_name=regex.full_match('Temp \\d{4}')
 ```
 
 Empty string or list check:
 ```swift
-Expression(.displayName, .empty)
+Field(.displayName, .empty)
 // display_name.empty
 ```
 
@@ -169,7 +169,7 @@ Expression(.displayName, .empty)
 
 Comparison of string length or list size:
 ```swift
-Expression(.displayName, .size, ">", 5)
+Field(.displayName, .size, ">", 5)
 // display_name.size > 5
 ```
 
