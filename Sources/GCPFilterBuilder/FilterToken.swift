@@ -54,6 +54,10 @@ public indirect enum FilterToken<Field: RawRepresentable>: CustomStringConvertib
                 case .fullMatchRegex(let pattern):
                     let escapedPattern = pattern.replacingOccurrences(of: "\\", with: "\\\\", options: .literal)
                     return "\(field.rawValue).regex.full_match('\(escapedPattern)')"
+                case .startsWith(let literal):
+                    return "\(field.rawValue).starts_with(\(literal.description))"
+                case .endsWith(let literal):
+                    return "\(field.rawValue).ends_with(\(literal.description))"
                 }
             }()
             return inversed ? "NOT " + string : string
@@ -71,6 +75,8 @@ public indirect enum FilterToken<Field: RawRepresentable>: CustomStringConvertib
 public enum FunctionExp {
     case empty
     case fullMatchRegex(String)
+    case startsWith(ValueBox)
+    case endsWith(ValueBox)
 }
 
 public enum FieldProperty {

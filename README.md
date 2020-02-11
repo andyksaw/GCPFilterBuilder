@@ -153,7 +153,6 @@ Or {
 Supports regex:
 ```swift
 Field(.displayName, .regexFullMatch("Temp \\d{4}"))
-
 // display_name=regex.full_match('Temp \\d{4}')
 ```
 
@@ -163,7 +162,24 @@ Field(.displayName, .empty)
 // display_name.empty
 ```
 
-`starts_with` and `ends_with` support coming soon...
+
+Starts with:
+```swift
+Field(.displayName, .startsWith("prefix"))
+// display_name.starts_with('prefix')
+
+Field(.displayName, .startsWith(123))
+// display_name.starts_with(123)
+```
+
+Ends with:
+```swift
+Field(.displayName, .endsWith("suffix"))
+// display_name.ends_with('suffix')
+
+Field(.displayName, .endsWith(123))
+// display_name.ends_with(123)
+```
 
 ### Special Properties
 
@@ -175,7 +191,7 @@ Field(.displayName, .size, ">", 5)
 
 ## Todo
 - [x] Support expressions for special properties
-- [ ] Support full range of function expressions
+- [x] Support full range of function expressions
 - [ ] Support unified date expressions/formatting
 - [ ] Solve namespace pollution problem
 - [ ] Unit tests
