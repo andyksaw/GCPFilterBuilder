@@ -53,6 +53,10 @@ public func Expression<Field: RawRepresentable>(_ field: Field, _ specialToken: 
     return .functionExpression(field, specialToken, inversed: false)
 }
 
+public func Expression<Field: RawRepresentable>(_ field: Field, _ property: FieldProperty, _ operator: Operator = .equal, rawValue: ValueBox) -> FilterToken<Field> where Field.RawValue == String {
+    return .propertyExpression(field: field, property: property, operator: `operator`, value: rawValue, inversed: false)
+}
+
 // MARK: - Inverted Expressions
 
 public func NotExpression<Field: RawRepresentable, Value: RawRepresentable>(_ field: Field, _ operator: Operator = .equal, case: Value) -> FilterToken<Field> where Field.RawValue == String, Value.RawValue == Int {
@@ -69,6 +73,10 @@ public func NotExpression<Field: RawRepresentable>(_ field: Field, _ operator: O
 
 public func NotExpression<Field: RawRepresentable>(_ field: Field, _ specialToken: FunctionExp) -> FilterToken<Field> where Field.RawValue == String {
     return .functionExpression(field, specialToken, inversed: true)
+}
+
+public func NotExpression<Field: RawRepresentable>(_ field: Field, _ property: FieldProperty, _ operator: Operator = .equal, rawValue: ValueBox) -> FilterToken<Field> where Field.RawValue == String {
+    return .propertyExpression(field: field, property: property, operator: `operator`, value: rawValue, inversed: true)
 }
 
 // MARK: Date Expressions

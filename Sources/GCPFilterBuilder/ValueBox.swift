@@ -36,50 +36,54 @@ protocol WrappedValueBox {
     var toString: String { get }
 }
 
-struct StringValueBox: WrappedValueBox {
-    var _value: String
+extension ValueBox {
 
-    var toString: String {
-        return "'\(_value)'"
+    struct StringValueBox: WrappedValueBox {
+        var _value: String
+
+        var toString: String {
+            return "'\(_value)'"
+        }
+
+        init(_ value: String) {
+            self._value = value
+        }
     }
 
-    init(_ value: String) {
-        self._value = value
-    }
-}
+    struct IntValueBox: WrappedValueBox {
+        var _value: Int
 
-struct IntValueBox: WrappedValueBox {
-    var _value: Int
+        var toString: String {
+            return "\(_value)"
+        }
 
-    var toString: String {
-        return "\(_value)"
-    }
-
-    init(_ value: Int) {
-        self._value = value
-    }
-}
-
-struct BoolValueBox: WrappedValueBox {
-    var _value: Bool
-
-    var toString: String {
-        return "\(_value)"
+        init(_ value: Int) {
+            self._value = value
+        }
     }
 
-    init(_ value: Bool) {
-        self._value = value
-    }
-}
+    struct BoolValueBox: WrappedValueBox {
+        var _value: Bool
 
-struct FloatValueBox: WrappedValueBox {
-    var _value: Float
+        var toString: String {
+            return "\(_value)"
+        }
 
-    var toString: String {
-        return "\(_value)"
+        init(_ value: Bool) {
+            self._value = value
+        }
     }
 
-    init(_ value: Float) {
-        self._value = value
+    struct FloatValueBox: WrappedValueBox {
+        var _value: Float
+
+        var toString: String {
+            return "\(_value)"
+        }
+
+        init(_ value: Float) {
+            self._value = value
+        }
     }
+
 }

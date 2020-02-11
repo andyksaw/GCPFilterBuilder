@@ -15,6 +15,7 @@ public indirect enum FilterToken<Field: RawRepresentable>: CustomStringConvertib
     case group([FilterToken<Field>])
     case expression(field: Field, operator: Operator, value: ValueBox, inversed: Bool)
     case functionExpression(Field, FunctionExp, inversed: Bool)
+    case propertyExpression(field: Field, property: FieldProperty, operator: Operator, value: ValueBox, inversed: Bool)
 
     public var description: String {
         switch self {
@@ -50,20 +51,28 @@ public indirect enum FilterToken<Field: RawRepresentable>: CustomStringConvertib
                 switch specialToken {
                 case .empty:
                     return "\(field.rawValue).empty"
-                case .size:
-                    return "\(field.rawValue).size"
                 case .fullMatchRegex(let pattern):
                     let escapedPattern = pattern.replacingOccurrences(of: "\\", with: "\\\\", options: .literal)
                     return "\(field.rawValue).regex.full_match('\(escapedPattern)')"
                 }
             }()
             return inversed ? "NOT " + string : string
+
+        case .propertyExpression(let field, let property, let `operator`, let value, let inversed):
+            switch property {
+            case .size:
+                let string = [field.rawValue, ".size", `operator`.rawValue, value.description].joined()
+                return inversed ? "NOT " + string : string
+            }
         }
     }
 }
 
 public enum FunctionExp {
     case empty
-    case size
     case fullMatchRegex(String)
+}
+
+public enum FieldProperty {
+    case size
 }

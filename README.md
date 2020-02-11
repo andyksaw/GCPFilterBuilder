@@ -157,10 +157,27 @@ Expression(.displayName, .regexFullMatch("Temp \\d{4}"))
 // display_name=regex.full_match('Temp \\d{4}')
 ```
 
+Empty string or list check:
+```swift
+Expression(.displayName, .empty)
+// display_name.empty
+```
+
 `starts_with` and `ends_with` support coming soon...
 
+### Special Properties
+
+Comparison of string length or list size:
+```swift
+Expression(.displayName, .size, ">", 5)
+// display_name.size > 5
+```
 
 ## Todo
+- [x] Support expressions for special properties
 - [ ] Support full range of function expressions
 - [ ] Support unified date expressions/formatting
+- [ ] Solve namespace pollution problem
 - [ ] Unit tests
+
+- [ ] Future: DSL for Sort strings?
